@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   launch : boolean = false;
   selectedLandButton;
   land : boolean = false;
+  isLaunched : boolean = true;
   year : number;
   isLoading : boolean = true;
   constructor( private http: HttpClient) {}
@@ -51,8 +52,11 @@ export class AppComponent implements OnInit {
         this.selectedLaunchButton = button
         if(val == 'False') {
           this.launch = false
+          this.land = false
+          this.isLaunched = false
         } else {
           this.launch = true
+          this.isLaunched = true
         }
       }
     } else {

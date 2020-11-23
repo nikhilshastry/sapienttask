@@ -25,7 +25,7 @@
           <div class="filter-header">Successful Landing</div>
           <div class="row">
             <span  style="margin:auto">
-              <button *ngFor="let lbutton of landButtons" class="btn filter-btn" [ngClass]="(selectedLandButton == lbutton) ? 'active' : ''" (click)="toggleSelect(lbutton, 'land', lbutton.name)">
+              <button *ngFor="let lbutton of landButtons" class="btn filter-btn" [disabled]="!isLaunched" [ngClass]="(selectedLandButton == lbutton) ? 'active' : ''" (click)="toggleSelect(lbutton, 'land', lbutton.name)">
                 {{lbutton.name}}
               </button>
             </span>
@@ -38,33 +38,35 @@
     </div>
     <ng-template #loaded>
       <div class="col-md-10 launch-columns">
-        <div class="row">
-          <div class="col-md-3 mx-auto my-5 launch-tile d-flex align-items-stretch" style="margin-top: 0!important;" *ngFor="let launch of launches">
-            <mdb-card>
-              <mdb-card-img [src]="launch.links.mission_patch" class="card_img" alt="Card image cap">
-              </mdb-card-img>
-              <mdb-card-body>
-                <mdb-card-title>
-                  <h5>{{launch.mission_name}} #{{launch.flight_number}}</h5>
-                </mdb-card-title>
+        <div class="row" *ngIf="launches?.length>0 else nothing">
+            <div class="col-md-3 mx-auto my-5 launch-tile d-flex align-items-stretch" style="margin-top: 0!important;" *ngFor="let launch of launches">
+              <mdb-card>
+                <mdb-card-img [src]="launch.links.mission_patch" class="card_img" alt="Card image cap">
+                </mdb-card-img>
+                <mdb-card-body>
+                  <mdb-card-title>
+                    <h5>{{launch.mission_name}} #{{launch.flight_number}}</h5>
+                  </mdb-card-title>
 
-                <mdb-card-text>
-                  <b>Mission Ids:</b><div *ngFor="let id of launch.mission_id">{{id}}</div>
-                </mdb-card-text>
-                <mdb-card-text>
-                  <b>Launch Year:</b>{{launch.launch_year}}
-                </mdb-card-text>
-                <mdb-card-text>
-                  <b>Successful Launch:</b>{{launch.launch_success}}
-                </mdb-card-text>
-                <mdb-card-text>
-                  <b>Successful Land:</b>{{launch.rocket.first_stage.cores[0].land_success}}
-                </mdb-card-text>
-              </mdb-card-body>
-            </mdb-card>
-          </div>
-        
+                  <mdb-card-text>
+                    <b>Mission Ids:</b><div *ngIf="launch.mission_id?.length>0 else nomissioniddata"><div *ngFor="let id of launch.mission_id">{{id}}</div></div><ng-template #nomissioniddata><div>No data</div></ng-template>
+                  </mdb-card-text>
+                  <mdb-card-text>
+                    <b>Launch Year:</b>{{launch.launch_year}}
+                  </mdb-card-text>
+                  <mdb-card-text>
+                    <b>Successful Launch:</b>{{launch.launch_success}}
+                  </mdb-card-text>
+                  <mdb-card-text>
+                    <b>Successful Land:</b>{{launch.rocket.first_stage.cores[0].land_success}}
+                  </mdb-card-text>
+                </mdb-card-body>
+              </mdb-card>
+            </div>
         </div>
+        <ng-template #nothing>
+          <div style="width: 100%; text-align: center;">No Items to display</div>
+        </ng-template>
       </div>
     </ng-template>
   </div>
